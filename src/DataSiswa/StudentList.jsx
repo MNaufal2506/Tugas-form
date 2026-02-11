@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { StudentContext } from "./StudentContext";
 
-export default function StudentList({ students, dispatch }) {
+export default function StudentList() {
+  const { students, dispatch } = useContext(StudentContext);
+
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({ nama: "", umur: "", kelas: "" });
 
   const handleDelete = (id) => {
-    dispatch({ type: "DELETE_DATA", payload: id });
+    dispatch({ type: "DELETE_STUDENT", payload: id });
   };
 
   const startEdit = (student) => {
@@ -19,7 +22,7 @@ export default function StudentList({ students, dispatch }) {
 
   const saveEdit = (id) => {
     dispatch({
-      type: "EDIT_DATA",
+      type: "UPDATE_STUDENT",
       payload: { id, ...editData },
     });
     setEditId(null);
@@ -40,43 +43,9 @@ export default function StudentList({ students, dispatch }) {
         {students.map((s, i) => (
           <tr key={s.id}>
             <td>{i + 1}</td>
-            <td>
-              {editId === s.id ? (
-                <input
-                  value={editData.nama}
-                  onChange={(e) =>
-                    setEditData({ ...editData, nama: e.target.value })
-                  }
-                />
-              ) : (
-                s.nama
-              )}
-            </td>
-            <td>
-              {editId === s.id ? (
-                <input
-                  type="text"
-                  value={editData.umur}
-                  onChange={(e) =>
-                    setEditData({ ...editData, umur: e.target.value })
-                  }
-                />
-              ) : (
-                s.umur
-              )}
-            </td>
-            <td>
-              {editId === s.id ? (
-                <input
-                  value={editData.kelas}
-                  onChange={(e) =>
-                    setEditData({ ...editData, kelas: e.target.value })
-                  }
-                />
-              ) : (
-                s.kelas
-              )}
-            </td>
+            <td>{editId === s.id ? ( <input value={editData.nama} onChange={(e) => setEditData({ ...editData, nama: e.target.value })} /> ) : ( s.nama )}</td>
+            <td>{editId === s.id ? ( <input type="number" min="1" max="100" step="1" value={editData.umur} onChange={(e) => setEditData({ ...editData, umur: e.target.value })} /> ) : ( s.umur )}</td>
+            <td>{editId === s.id ? ( <input value={editData.kelas} onChange={(e) => setEditData({ ...editData, kelas: e.target.value })}/> ) : ( s.kelas )}</td>
             <td>
               {editId === s.id ? (
                 <button className="edit" onClick={() => saveEdit(s.id)}>

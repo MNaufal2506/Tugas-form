@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { StudentContext } from "./StudentContext";
 
-export default function StudentForm({ dispatch }) {
+export default function StudentForm() {
+  const { dispatch } = useContext(StudentContext);
+
   const [nama, setNama] = useState("");
   const [umur, setUmur] = useState("");
   const [kelas, setKelas] = useState("");
@@ -10,7 +13,7 @@ export default function StudentForm({ dispatch }) {
     if (!nama || !umur || !kelas) return;
 
     dispatch({
-      type: "ADD_DATA",
+      type: "ADD_STUDENT",
       payload: { id: Date.now(), nama, umur, kelas },
     });
 
